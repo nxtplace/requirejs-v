@@ -1,0 +1,26 @@
+{
+  "name": "requirejs-v",
+  "version": "0.1.1",
+  "homepage": "https://github.com/nxtplace/requirejs-v",
+  "authors": [
+    "Joris van der Burgh"
+  ],
+  "description": "A requirejs preprocessor to automatically generate a define call.",
+  "main": "v.js",
+  "moduleType": [
+    "amd"
+  ],
+  "keywords": [
+    "require",
+    "requirejs",
+    "v"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
