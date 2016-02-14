@@ -15,7 +15,7 @@
  */
 define(['module'], function (module) {
     "use strict";
-    var VERSION_NR = "0.1.1";
+    var VERSION_NR = "0.1.2";
     var debug = false;
     var isArray = Array.isArray;
     if (!isArray) {
@@ -72,6 +72,7 @@ define(['module'], function (module) {
           return baseParts.join('?');
       },
       defaults = {
+          debug: false,
           transformOnTheFly: true,
           noGlobalExports: false
       },
@@ -255,8 +256,8 @@ define(['module'], function (module) {
             };
         },
         load: function (name, req, onLoad, config) {
+            
             var moduleName = name;
-            log('Load: ', name);
             //var parsed = v.parseName(name);
             if (!config.config.v) {
                 config.config.v = {};
@@ -265,14 +266,18 @@ define(['module'], function (module) {
 
             // make a copy of the config object and inject defaults
             var replaceConfig = copyToIf(defaults, copyToIf(config.config.v, {})),
-        moduleConfig = replaceConfig[name] || replaceConfig,
-        toLoad = [],
-        shouldRun = config.isBuild ? moduleConfig.optimize : true,
+                moduleConfig = replaceConfig[name] || replaceConfig,
+                toLoad = [],
                 isBuild = config.isBuild,
+                shouldRun = isBuild ? moduleConfig.optimize : true,
                 transformOnTheFly = !isBuild && replaceConfig.transformOnTheFly,
-        pattern, value, path,
+                //pattern, value, 
+                path,
                 shimDependencies = [];
 
+            // set the debug variable from config
+            debug = !isBuild && replaceConfig.debug;
+            log('Load: ', name);
 
             (function () {
 
