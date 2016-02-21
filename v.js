@@ -15,7 +15,7 @@
  */
 define(['module'], function (module) {
     "use strict";
-    var VERSION_NR = "0.1.2";
+    var VERSION_NR = "0.1.3";
     var debug = false;
     var isArray = Array.isArray;
     if (!isArray) {
@@ -25,17 +25,29 @@ define(['module'], function (module) {
     }
 
     var pluginName = 'v',
-      log = function (msg) {
+      _log = function (type, args) {
           if (!debug) return;
           try {
 
-              if (typeof (console) != 'undefined' && console.log && console.log.apply) {
-                  var args = arguments;
+              if (type == 1 && typeof (console) != 'undefined' && console.warn && console.warn.apply) {
+                  //var args = arguments;
+                  Array.prototype.unshift.call(args, "W: ");
+                  console.warn.apply(console, args);
+              } else if (typeof (console) != 'undefined' && console.log && console.log.apply) {
+                  //var args = arguments;
                   Array.prototype.unshift.call(args, "V: ");
                   console.log.apply(console, args);
-              }
+              } 
           } catch (e) { }
 
+      },
+      warn = function(msg) {
+          if (!debug) return;       
+        _log(1, arguments);
+      },
+      log = function(msg) {
+          if (!debug) return;
+        _log(0, arguments);
       },
       normalizeRequireUrl = function (url, removeQueryString) {
           var baseParts = url.split('?'),
@@ -461,9 +473,12 @@ define(['module'], function (module) {
                     //console.log(req.toUrl(mn + ".js"));
                     //console.log(normalizeRequireUrl(mn))
                     //console.log(req.toUrl());
-
-                    onLoad.fromText(content);
-
+                    try {
+                        onLoad.fromText(content);
+                    }catch(e) {
+                        warn("Error evaluating transformed file: "+fullModuleName + ". " + e);
+                        throw e;
+                    }
                     /*
                     content = v.transform(replaceConfig, content, fullModuleName);
                     try {                    
