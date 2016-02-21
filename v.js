@@ -15,7 +15,7 @@
  */
 define(['module'], function (module) {
     "use strict";
-    var VERSION_NR = "0.1.3";
+    var VERSION_NR = "0.1.4";
     var debug = false;
     var isArray = Array.isArray;
     if (!isArray) {
